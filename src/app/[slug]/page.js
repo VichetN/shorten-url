@@ -5,7 +5,6 @@ export async function generateStaticParams() {
   const res = await fetch(fetchDataByGet("/api/url-workers")).then((res1) =>
     res1.json()
   );
-
   return res?.data?.map((load) => ({
     slug: load?.id,
   }));
