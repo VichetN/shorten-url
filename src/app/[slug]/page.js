@@ -11,9 +11,11 @@ const getURL = async (params) => {
       ...params,
     }),
     {
-      next: 20,
+      next: {
+        revalidate: 20,
+      },
     }
-  ).then(res1 => res1.json())
+  ).then((res1) => res1.json());
 
   return res;
 };
@@ -22,5 +24,5 @@ export default async function UrlPage({ params }) {
   const { slug } = params;
   const urlData = await getURL({ id: slug });
 
-  return <div>Test</div>;
+  return <UrlDetailPage urlData={urlData?.data} />;
 }
