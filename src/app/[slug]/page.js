@@ -1,6 +1,5 @@
 import { UrlDetailPage } from "@/components/pages";
-import { fetchDataByGet, getDomain } from "@/utils";
-import axios from "axios";
+import { fetchDataByGet } from "@/utils";
 
 const getURL = async (params) => {
   // const res = await axios.get(`${getDomain()}/api/url-workers`, {
@@ -23,5 +22,5 @@ export default async function UrlPage({ params }) {
   const { slug } = params;
   const urlData = await getURL({ id: slug });
 
-  return <UrlDetailPage urlData={urlData?.data} />;
+  return <div>Test</div>;
 }
