@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { HiLink } from "react-icons/hi";
 import UrlShortList from "./urlShortList";
 
-export default function UrlDetailPage({ slug }) {
+export default function UrlDetailPage({ urlData }) {
   const { data } = useSWR(
     "https://restcountries.com/v3.1/independent?status=true&fields=name",
     fetcher
@@ -24,7 +24,7 @@ export default function UrlDetailPage({ slug }) {
           <HiLink size={20} />
           <h2>
             Original link:{" "}
-            <u className="italic">https://longlink.cm/slug-data</u>
+            <u className="italic">{urlData?.url}</u>
           </h2>
         </div>
         <div className="flex gap-3">
