@@ -33,7 +33,7 @@ function UrlItem({ dataSource, refresh }) {
     <li className=" bg-white my-2 flex">
       <Link href={`/${dataSource?.id}`} className="w-full">
         <div className="flex-1 p-3">
-          <span className="w-full">{dataSource?.url}</span>
+          <span className="w-full break-all">{dataSource?.url}</span>
         </div>
       </Link>
       <button

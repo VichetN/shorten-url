@@ -85,9 +85,11 @@ export default function UrlDetailPage({ slug }) {
     <section className="p-4 w-full">
       <div className="w-full lg:w-[600px] mx-auto">
         <div className="py-4 flex gap-3">
+          <div className="w-[40px]">
           <HiLink size={20} />
+          </div>
           <h2>
-            Original link: <br className="block md:hidden" /><u className="italic">{urlData?.url}</u>
+            Original link: <br className="block md:hidden" /><u className="italic break-all">{urlData?.url}</u>
           </h2>
         </div>
         <div className="flex gap-3 w-full">
