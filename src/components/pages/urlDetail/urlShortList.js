@@ -38,10 +38,15 @@ function UrlItem({ dataSource, refresh }) {
       <div className="flex-1 p-4 w-full">
         <h3 className="w-full font-bold">{dataSource?.country}</h3>
         <Link href={url} target="_blank" className="w-auto">
-          <p className="text-gray-400 cursor-pointer hover:underline line-clamp-1">{url}</p>
+          <p className="text-gray-400 cursor-pointer hover:underline break-all">
+            {url}
+          </p>
         </Link>
       </div>
-      <button className="border md:border-none p-4 w-fit m-4 md:m-0" onClick={handleDelete}>
+      <button
+        className="border md:border-none p-4 w-fit m-4 md:m-0"
+        onClick={handleDelete}
+      >
         {loading ? (
           <AiOutlineLoading3Quarters className="animate-spin" size={20} />
         ) : (
