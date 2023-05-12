@@ -44,3 +44,24 @@ export async function POST(req) {
   //   const res = await kv.hset(`url:${uuidv4()}`);
   //   return NextResponse.json(res);
 }
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    // const { id } = await req.json();
+
+    if (id) {
+      const urlList = await kv.json.get("urlListData");
+      const data = urlList.filter((item) => item.id !== id);
+      await kv.json.set("urlListData", "$", data);
+    }
+
+    return NextResponse.json({ msg: "ok", success: true });
+  } catch (error) {
+    // Handle errors
+    return NextResponse.json({ msg: error.message });
+  }
+  //   const res = await kv.hset(`url:${uuidv4()}`);
+  //   return NextResponse.json(res);
+}
