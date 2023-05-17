@@ -35,7 +35,7 @@ function RedirectPage({ itemId }) {
 
       redirect(newUrl);
     }
-  }, [urlData?.url]);
+  }, [urlData]);
 
   return <div className="animate-pulse">Redirecting...</div>;
 }
