@@ -36,7 +36,7 @@ export async function GET(req) {
 
     // const data = await kv.del("urlListData");
 
-    return NextResponse.json({ msg: "ok", data: { url: findLink } });
+    return NextResponse.json({ msg: "ok", data: { url: findLink, location } });
   } catch (error) {
     // Handle errors
     return NextResponse.json({ msg: error.message });

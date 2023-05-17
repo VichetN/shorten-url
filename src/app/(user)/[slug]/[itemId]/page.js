@@ -15,15 +15,15 @@ export default async function Page({ params }) {
 
   const urlData = await getData({ id: itemId });
 
-  if (urlData?.url) {
-    let newUrl = urlData?.url;
-    if (!newUrl?.includes("http")) {
-      newUrl = `http://${newUrl}`;
-    }
-    redirect(newUrl);
-  } else {
-    notFound();
-  }
+  // if (urlData?.url) {
+  //   let newUrl = urlData?.url;
+  //   if (!newUrl?.includes("http")) {
+  //     newUrl = `http://${newUrl}`;
+  //   }
+  //   redirect(newUrl);
+  // } else {
+  //   notFound();
+  // }
 
-  return <div>Loading...</div>;
+  return <div>{JSON.stringify(urlData, null, 2)}</div>;
 }
