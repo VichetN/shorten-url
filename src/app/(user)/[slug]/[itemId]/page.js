@@ -1,4 +1,6 @@
-import { fetchDataByGet } from "@/utils";
+// "use client";
+
+import { fetchDataByGet, getLocationByIP } from "@/utils";
 import axios from "axios";
 import { redirect, notFound } from "next/navigation";
 import React from "react";
@@ -13,7 +15,11 @@ const getData = async (params) => {
 export default async function Page({ params }) {
   const { slug, itemId } = params;
 
-  const urlData = await getData({ id: itemId });
+  const location = await getLocationByIP();
+  const urlData = await getData({
+    id: itemId,
+    countryCode: location?.country_code,
+  });
 
   // if (urlData?.url) {
   //   let newUrl = urlData?.url;
@@ -25,5 +31,9 @@ export default async function Page({ params }) {
   //   notFound();
   // }
 
-  return <div>{urlData?.url} / {urlData?.location?.country_code}</div>;
+  return (
+    <div>
+      {urlData?.url} / {location?.country_code}
+    </div>
+  );
 }

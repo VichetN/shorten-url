@@ -7,26 +7,27 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
+    const countryCode = searchParams.get("countryCode");
 
     let findLink;
-    let location;
+    // let location;
 
     if (id) {
-      location = await getLocationByIP();
+      // location = await getLocationByIP();
 
       const urlList = await kv.json.get("urlListData");
       const currentUrl = urlList?.find((e) => e?.id === id);
       findLink = currentUrl?.defaultLink;
 
       const findTargetLink = (currentUrl?.targetLinks || [])?.find(
-        (e) => e?.countryCode === location?.country_code
+        (e) => e?.countryCode === countryCode
       );
       if (findTargetLink) {
         findLink = findTargetLink?.targetLink;
       }
     }
 
-    return NextResponse.json({ msg: "ok", data: { url: findLink, location } });
+    return NextResponse.json({ msg: "ok", data: { url: findLink } });
   } catch (error) {
     // Handle errors
     return NextResponse.json({ msg: error.message });
