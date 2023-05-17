@@ -9,9 +9,10 @@ export async function GET(req) {
     const id = searchParams.get("id");
 
     let findLink;
+    let location;
 
     if (id) {
-      const location = await getLocationByIP();
+      location = await getLocationByIP();
 
       const urlList = await kv.json.get("urlListData");
       const currentUrl = urlList?.find((e) => e?.id === id);
@@ -23,18 +24,7 @@ export async function GET(req) {
       if (findTargetLink) {
         findLink = findTargetLink?.targetLink;
       }
-      // let copyTargetLinks = urlList?.map((e) => e?.targetLinks);
-      // copyTargetLinks = copyTargetLinks?.flat();
-
-      // const shortUrl = copyTargetLinks?.find((e) => e?.id === id);
-      // const originalUrl = urlList?.find(
-      //   (e) => e?.id === shortUrl?.originalUrlId
-      // );
-
-      // data = originalUrl;
     }
-
-    // const data = await kv.del("urlListData");
 
     return NextResponse.json({ msg: "ok", data: { url: findLink, location } });
   } catch (error) {

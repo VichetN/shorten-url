@@ -25,5 +25,5 @@ export default async function Page({ params }) {
   //   notFound();
   // }
 
-  return <div>{JSON.stringify(urlData, null, 2)}</div>;
+  return <div>{urlData?.url} / {urlData?.location?.country_code}</div>;
 }
