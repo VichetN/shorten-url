@@ -113,7 +113,7 @@ export default function UrlDetailPage({ slug }) {
           </div>
           <h2>
             URL: <br className="block md:hidden" />{" "}
-            <Link href={shortURL}>
+            <Link target="_blank" href={shortURL}>
               <u className="italic break-all">{urlData?.id && shortURL}</u>
             </Link>
           </h2>
