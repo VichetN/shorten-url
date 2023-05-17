@@ -23,10 +23,10 @@ export const getPublicIP = async () => {
 
 export const getLocationByIP = async () => {
   const ip = await getPublicIP();
-  return await fetch(`http://ip-api.com/json/${ip?.ip}`).then(res => res.json())
+  // return await fetch(`http://ip-api.com/json/${ip?.ip}`).then(res => res.json())
   // return await ipLocation(ip?.ip);
   // console.log(ip);
-  // return await ip2location.fetch(ip?.ip);
+  return await ip2location.fetch(ip?.ip);
 };
 
 export const generateID = () => {
