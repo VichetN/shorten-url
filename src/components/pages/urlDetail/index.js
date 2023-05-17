@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchDataByGet, fetcher, getDomain } from "@/utils";
+import { fetchDataByGet, fetcher, getDomain, isValidURL } from "@/utils";
 import useSWR from "swr";
 import { HiLink } from "react-icons/hi";
 
@@ -47,7 +47,11 @@ export default function UrlDetailPage({ slug }) {
     a.common.localeCompare(b.common)
   );
 
-  const { data: getUrl, refresh, loading } = useRequest(getURL, {
+  const {
+    data: getUrl,
+    refresh,
+    loading,
+  } = useRequest(getURL, {
     defaultParams: [{ id: slug }],
   });
   const urlData = getUrl?.data;
@@ -64,6 +68,11 @@ export default function UrlDetailPage({ slug }) {
 
   const handleGenerateNewLink = () => {
     if (country === "" || targetLink?.trim() === "") {
+      return;
+    }
+
+    if (!isValidURL(targetLink?.trim())) {
+      toast.warn("Invalid URL!");
       return;
     }
 
@@ -87,10 +96,12 @@ export default function UrlDetailPage({ slug }) {
     });
   };
 
-  if(loading) {
-    return <div className="w-full lg:w-[600px] mx-auto">
-      <p className="py-8 animate-bounce">Loading...</p>
-    </div>
+  if (loading) {
+    return (
+      <div className="w-full lg:w-[600px] mx-auto">
+        <p className="py-8 animate-bounce">Loading...</p>
+      </div>
+    );
   }
 
   return (
