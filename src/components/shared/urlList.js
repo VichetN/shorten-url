@@ -3,7 +3,7 @@ import Link from "next/link";
 import { IoMdTrash } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
-import { fetchDataByGet } from "@/utils";
+import { fetchDataByGet, getDomain } from "@/utils";
 import { useRouter, usePathname } from "next/navigation";
 
 const deleteURL = async (params) => {
@@ -33,7 +33,8 @@ function UrlItem({ dataSource, refresh }) {
     <li className=" bg-white my-2 flex">
       <Link href={`/${dataSource?.id}`} className="w-full">
         <div className="flex-1 p-3">
-          <span className="w-full break-all">{dataSource?.url}</span>
+          {/* <span className="w-full break-all">{dataSource?.url}</span> */}
+          <span className="w-full break-all">{dataSource?.id}</span>
         </div>
       </Link>
       <button

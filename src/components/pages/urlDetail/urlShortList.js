@@ -13,9 +13,9 @@ const deleteShortUrl = async (params) => {
 };
 
 function UrlItem({ dataSource, refresh }) {
-  const url = `${getDomain()}/${dataSource?.countryCode?.toLowerCase()}/${
-    dataSource?.id
-  }`;
+  // const url = `${getDomain()}/${dataSource?.countryCode?.toLowerCase()}/${
+  //   dataSource?.id
+  // }`;
 
   const { run: runDelete, loading } = useRequest(deleteShortUrl, {
     manual: true,
@@ -37,9 +37,9 @@ function UrlItem({ dataSource, refresh }) {
     <li className="my-2 flex flex-col md:flex-row">
       <div className="flex-1 p-4 w-full">
         <h3 className="w-full font-bold">{dataSource?.country}</h3>
-        <Link href={url} target="_blank" className="w-auto">
+        <Link href={dataSource?.targetLink} target="_blank" className="w-auto">
           <p className="text-gray-400 cursor-pointer hover:underline break-all">
-            {url}
+            {dataSource?.targetLink}
           </p>
         </Link>
       </div>
@@ -57,11 +57,11 @@ function UrlItem({ dataSource, refresh }) {
   );
 }
 
-function UrlShortList({ shortLinks = [], refresh }) {
+function UrlShortList({ targetLinks = [], refresh }) {
   return (
     <div className="py-4 w-full">
       <ul className="bg-white">
-        {shortLinks?.map((load) => (
+        {targetLinks?.map((load) => (
           <UrlItem key={load?.id} dataSource={load} refresh={refresh} />
         ))}
       </ul>

@@ -26,7 +26,6 @@ import { UrlDetailPage } from "@/components/pages";
 
 export default async function UrlPage({ params }) {
   const { slug } = params;
-  // const urlData = await getURL({ id: slug });
 
   return <UrlDetailPage slug={slug} />;
 }

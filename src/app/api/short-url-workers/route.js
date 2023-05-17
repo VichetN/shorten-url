@@ -1,30 +1,42 @@
 import { v4 as uuidv4 } from "uuid";
 import kv from "@vercel/kv";
 import { NextResponse } from "next/server";
-import shortUUID from "short-uuid";
+import { getLocationByIP } from "@/utils";
 
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
-    let data;
+    let findLink;
 
     if (id) {
+      const location = await getLocationByIP();
+
       const urlList = await kv.json.get("urlListData");
+      const currentUrl = urlList?.find((e) => e?.id === id);
+      findLink = currentUrl?.defaultLink;
 
-      let copyShortLinks = urlList?.map((e) => e?.shortLinks);
-      copyShortLinks = copyShortLinks?.flat();
+      const findTargetLink = (currentUrl?.targetLinks || [])?.find(
+        (e) => e?.countryCode === location?.country_code
+      );
+      if (findTargetLink) {
+        findLink = findTargetLink?.targetLink;
+      }
+      // let copyTargetLinks = urlList?.map((e) => e?.targetLinks);
+      // copyTargetLinks = copyTargetLinks?.flat();
 
-      const shortUrl = copyShortLinks?.find((e) => e?.id === id);
-      const originalUrl = urlList?.find((e) => e?.id === shortUrl?.originalUrlId);
+      // const shortUrl = copyTargetLinks?.find((e) => e?.id === id);
+      // const originalUrl = urlList?.find(
+      //   (e) => e?.id === shortUrl?.originalUrlId
+      // );
 
-      data = originalUrl;
+      // data = originalUrl;
     }
 
     // const data = await kv.del("urlListData");
 
-    return NextResponse.json({ msg: "ok", data });
+    return NextResponse.json({ msg: "ok", data: { url: findLink } });
   } catch (error) {
     // Handle errors
     return NextResponse.json({ msg: error.message });
@@ -33,16 +45,16 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const { id, countryCode, country } = await req.json();
+    const { id, countryCode, country, targetLink } = await req.json();
 
-    const shortId = shortUUID.generate();
-    const shortUrl = `${
-      process.env.NEXT_PUBLIC_API_URL
-    }/${countryCode?.toLowerCase()}/${shortId}`;
+    const targetId = uuidv4();
+    // const shortUrl = `${
+    //   process.env.NEXT_PUBLIC_API_URL
+    // }/${countryCode?.toLowerCase()}/${targetId}`;
 
-    const newShortURL = {
-      id: shortId,
-      shortUrl,
+    const newTargetURL = {
+      id: targetId,
+      targetLink,
       country,
       countryCode,
       originalUrlId: id,
@@ -51,12 +63,12 @@ export async function POST(req) {
     let urlList = await kv.json.get("urlListData");
     const urlIndex = urlList?.findIndex((e) => e?.id === id);
 
-    const newShortLinks = [
-      ...(urlList[urlIndex]?.shortLinks || []),
-      newShortURL,
+    const newTargetLinks = [
+      ...(urlList[urlIndex]?.targetLinks || []),
+      newTargetURL,
     ];
 
-    const newUrl = { ...urlList[urlIndex], shortLinks: [...newShortLinks] };
+    const newUrl = { ...urlList[urlIndex], targetLinks: [...newTargetLinks] };
     urlList?.splice(urlIndex, 1, newUrl);
 
     await kv.json.set("urlListData", "$", urlList);
@@ -83,10 +95,10 @@ export async function DELETE(req) {
 
       const urlIndex = urlList?.findIndex((item) => item.id === originalUrlId);
 
-      const newShortLinks = [
-        ...(urlList[urlIndex]?.shortLinks || []).filter((e) => e?.id !== id),
+      const newTargetLinks = [
+        ...(urlList[urlIndex]?.targetLinks || []).filter((e) => e?.id !== id),
       ];
-      const newUrl = { ...urlList[urlIndex], shortLinks: [...newShortLinks] };
+      const newUrl = { ...urlList[urlIndex], targetLinks: [...newTargetLinks] };
       urlList?.splice(urlIndex, 1, newUrl);
 
       await kv.json.set("urlListData", "$", urlList);

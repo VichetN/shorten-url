@@ -4,7 +4,7 @@ import { useRequest } from "ahooks";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { isValidURL } from "@/utils";
+import { generateID, isValidURL } from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRecoilState } from "recoil";
 import { openMenuSideBarAtom } from "@/recoils";
@@ -12,15 +12,30 @@ import { SlClose } from "react-icons/sl";
 import UrlList from "./urlList";
 
 function MenuContent({ inputValue, setInputValue, handleAdd }) {
+  const handleGenerateURL = () => {
+    const id = generateID();
+    setInputValue(id);
+  };
   return (
     <div className="grid grid-cols-2 gap-4">
       <div className="col-span-2 flex gap-2">
-        <input
-          className="p-2 rounded-sm w-full"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Target url*"
-        />
+        <div className="flex rounded-sm bg-white overflow-hidden">
+          <input
+            className="p-2  w-full flex-1 outline-none"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Target url*"
+            disabled
+          />
+          <div className="w-fit p-2">
+            <button
+              onClick={handleGenerateURL}
+              className="bg-gray-500 text-sm p-1 rounded-full text-white"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
         <button className="px-2 bg-green-400 rounded-sm" onClick={handleAdd}>
           ADD
         </button>
@@ -41,13 +56,12 @@ const getAllURL = async (params) => {
 
 function SideBar() {
   const [inputValue, setInputValue] = useState("");
+  const [urlListArr, setUrlListArr] = useState([]);
   const [openSideBar, setOpenSideBar] = useRecoilState(openMenuSideBarAtom);
   const router = useRouter();
   const pathname = usePathname();
 
   let toastId;
-
-  // const toastId = toast("Hello");
 
   const { data: urlList, refresh } = useRequest(getAllURL);
   const { runAsync } = useRequest(addURL, {
@@ -67,14 +81,9 @@ function SideBar() {
       return;
     }
 
-    if (!isValidURL(newValue)) {
-      toast.error("Invalid URL");
-      return;
-    }
-
     toastId = toast.loading("Please wait...");
     runAsync({
-      url: newValue,
+      id: newValue,
     }).then(() => {
       toast.update(toastId, {
         render: "Added",
@@ -86,11 +95,14 @@ function SideBar() {
   };
 
   useEffect(() => {
-    if(openSideBar){
-      setOpenSideBar(false)
+    if (openSideBar) {
+      setOpenSideBar(false);
     }
-  }, [pathname])
-  
+  }, [pathname]);
+
+  useEffect(() => {
+    setUrlListArr(urlList?.data || []);
+  }, [urlList?.data]);
 
   return (
     <>
@@ -115,7 +127,7 @@ function SideBar() {
               setInputValue={setInputValue}
               handleAdd={handleAdd}
             />
-            <UrlList dataSource={urlList?.data} refresh={refresh} />
+            <UrlList dataSource={urlListArr} refresh={refresh} />
           </motion.main>
         )}
       </AnimatePresence>
@@ -125,7 +137,7 @@ function SideBar() {
           setInputValue={setInputValue}
           handleAdd={handleAdd}
         />
-        <UrlList dataSource={urlList?.data} refresh={refresh} />
+        <UrlList dataSource={urlListArr} refresh={refresh} />
       </main>
     </>
   );
