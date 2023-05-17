@@ -14,6 +14,7 @@ const getData = async (params) => {
       countryCode: location?.countryCode,
     })
   );
+  console.log(location);
   return data?.data?.data;
 };
 
@@ -22,20 +23,20 @@ function RedirectPage({ itemId }) {
     defaultParams: [{ id: itemId }],
   });
 
-//   useEffect(() => {
-//     if (urlData) {
-//       let newUrl = urlData?.url;
-//       if (!newUrl?.includes("http")) {
-//         newUrl = `http://${newUrl}`;
-//       }
+  //   useEffect(() => {
+  //     if (urlData) {
+  //       let newUrl = urlData?.url;
+  //       if (!newUrl?.includes("http")) {
+  //         newUrl = `http://${newUrl}`;
+  //       }
 
-//       if (!urlData?.url) {
-//         notFound();
-//       }
+  //       if (!urlData?.url) {
+  //         notFound();
+  //       }
 
-//       redirect(newUrl);
-//     }
-//   }, [urlData?.url]);
+  //       redirect(newUrl);
+  //     }
+  //   }, [urlData?.url]);
 
   return <div className="animate-pulse">Redirecting...</div>;
 }
