@@ -11,7 +11,7 @@ const getData = async (params) => {
   const data = await axios.get(
     fetchDataByGet("/api/short-url-workers", {
       ...params,
-      countryCode: location?.country_code,
+      countryCode: location?.countryCode,
     })
   );
   return data?.data?.data;
